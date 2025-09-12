@@ -2,9 +2,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Homepage from "./pages/Homepage";  
-
 import Login from "./pages/Login";
-import ClientDashboard from "./pages/ClientDashboard";
+import QrPage from "./pages/Qrpage";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Dashboard from "./pages/admin/Dashboard";
 import Stock from "./pages/admin/Stock";
@@ -30,7 +29,7 @@ function App() {
           path="/client"
           element={
             <ProtectedRoute role="client">
-              <ClientDashboard />
+              <QrPage />
             </ProtectedRoute>
           }
         />
