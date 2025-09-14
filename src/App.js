@@ -9,6 +9,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import Stock from "./pages/admin/Stock";
 import Suppliers from "./pages/admin/Supplier";
 import PurchaseLogs from "./pages/admin/PurchaseLogs";
+import Settings  from "./pages/admin/Settings";
 
 function App() {
   return (
