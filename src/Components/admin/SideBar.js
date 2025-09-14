@@ -32,6 +32,7 @@ function Sidebar() {
         <Link to="/admin/stock" className="hover:bg-gray-700 p-2 rounded">Stock Tracking</Link>
         <Link to="/admin/suppliers" className="hover:bg-gray-700 p-2 rounded">Suppliers</Link>
         <Link to="/admin/purchase-logs" className="hover:bg-gray-700 p-2 rounded">Purchase & Usage Logs</Link>
+        <Link to="/admin/settings" className="hover:bg-gray-700 p-2 rounded">Settings</Link>
       </nav>
     </div>
   );
