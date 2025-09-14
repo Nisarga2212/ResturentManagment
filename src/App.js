@@ -60,6 +60,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+          <Route
+          path="/admin/settings"
+          element={
+            <ProtectedRoute role="admin">
+              <Settings/>
+            </ProtectedRoute>
+          }
+        />
+          
       </Routes>
     </Router>
   );
