@@ -1,240 +1,149 @@
-// src/pages/admin/Stock.js
-/* import { useState, useEffect, useRef } from "react";
-import { db } from "../../firebase";
-import { collection, addDoc, getDocs, updateDoc, doc } from "firebase/firestore";
-import AdminLayout from "./AdminLayout";
+// import { useState, useEffect, useRef } from "react";
+// import { db } from "../../firebase";
+// import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
+// import AdminLayout from "./AdminLayout";
 
-function Stock() {
-    const [items, setItems] = useState([]);
-    const [newItem, setNewItem] = useState({ name: "", quantity: 0 });
-    const threshold = 5;
+// function Stock() {
+//     const [items, setItems] = useState([]);
+//     const [newItem, setNewItem] = useState({ name: "", quantity: 0 });
+//     const threshold = 5;
 
-    const updateTimers = useRef({});
+//     const updateTimers = useRef({});
 
-    useEffect(() => {
-        fetchStock();
-    }, []);
+//     useEffect(() => {
+//         fetchStock();
+//     }, []);
 
-    const fetchStock = async () => {
-        const snapshot = await getDocs(collection(db, "stock"));
-        setItems(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+//     const fetchStock = async () => {
+//         const snapshot = await getDocs(collection(db, "stock"));
+//         setItems(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+//     };
 
-    };
+//     const addItem = async () => {
+//         if (!newItem.name.trim()) return;
+//         await addDoc(collection(db, "stock"), newItem);
+//         setNewItem({ name: "", quantity: 0 });
+//         fetchStock();
+//     };
 
-    const addItem = async () => {
-        await addDoc(collection(db, "stock"), newItem);
-        setNewItem({ name: "", quantity: 0 });
-        fetchStock();
-    };
+//     const updateQuantity = (id, quantity) => {
+//         if (updateTimers.current[id]) {
+//             clearTimeout(updateTimers.current[id]);
+//         }
 
-    const updateQuantity = (id, quantity) => {
-        if (updateTimers.current[id]) {
-            clearTimeout(updateTimers.current[id]);
-        }
+//         updateTimers.current[id] = setTimeout(async () => {
+//             await updateDoc(doc(db, "stock", id), { quantity });
+//             fetchStock();
+//             delete updateTimers.current[id];
+//         }, 300);
+//     };
 
-        updateTimers.current[id] = setTimeout(async () => {
-            await updateDoc(doc(db, "stock", id), { quantity });
-            fetchStock();
-            delete updateTimers.current[id];
-        }, 300); 
-    };
+//     const deleteItem = async (id, name) => {
+//         const confirmDelete = window.confirm(`Are you sure you want to delete "${name}"?`);
+//         if (!confirmDelete) return;
 
+//         await deleteDoc(doc(db, "stock", id));
+//         setItems(items.filter((item) => item.id !== id));
+//     };
 
-    return (
-        <AdminLayout>
-            <h2 className="text-2xl font-bold mb-4">Stock Tracking</h2>
-            <div className="mb-4 flex gap-2">
-                <input
-                    type="text"
-                    placeholder="Item name"
-                    className="border p-2"
-                    value={newItem.name}
-                    onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-                />
-                <input
-                    type="number"
-                    placeholder="Quantity"
-                    className="border p-2"
-                    value={newItem.quantity}
-                    onChange={(e) => setNewItem({ ...newItem, quantity: Number(e.target.value) })}
-                />
-                <button onClick={addItem} className="bg-blue-600 text-white px-4 py-2 rounded">
-                    Add
-                </button>
-            </div>
+//     // Find low stock items
+//     const lowStockItems = items.filter(item => item.quantity < threshold);
 
-            <table className="w-full border">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th className="p-2 border">Item</th>
-                        <th className="p-2 border">Quantity</th>
-                        <th className="p-2 border">Update</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {items.map((item) => (
-                        <tr key={item.id} className="text-center">
-                            <td className={`p-2 border font-bold  ${item.quantity < threshold ? "text-red-600" : ""}`}>{item.name}</td>
-                            <td className={`p-2 border font-bold  ${item.quantity < threshold ? "text-red-600" : ""}`}>{item.quantity}</td>
-                            <td className="p-2 border">
-                                <button
-                                    onClick={() => {
-                                        updateQuantity(item.id, item.quantity + 1)
-                                        setItems(items.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i))
-                                    }
-                                    }
-                                    className="px-2 bg-green-500 text-white rounded"
-                                >
-                                    +1
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        updateQuantity(item.id, item.quantity - 1)
-                                        setItems(items.map(i => i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i))
-                                    }}
-                                    className="px-2 ml-2 bg-red-500 text-white rounded"
-                                >
-                                    -1
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </AdminLayout>
-    );
-}
+//     return (
+//         <AdminLayout>
+//             <h2 className="text-2xl font-bold mb-4">Stock Tracking</h2>
 
-export default Stock;
-*/
+//             {/* Low Stock Alert Section */}
+//             {lowStockItems.length > 0 && (
+//                 <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+//                     <strong>⚠ Low Stock Alert!</strong>
+//                     <ul className="list-disc list-inside mt-2">
+//                         {lowStockItems.map(item => (
+//                             <li key={item.id}>
+//                                 {item.name} (Only {item.quantity} left)
+//                             </li>
+//                         ))}
+//                     </ul>
+//                 </div>
+//             )}
 
+//             {/* Add Item Section */}
+//             <div className="mb-4 flex gap-2">
+//                 <input
+//                     type="text"
+//                     placeholder="Item name"
+//                     className="border p-2"
+//                     value={newItem.name}
+//                     onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+//                 />
+//                 <input
+//                     type="number"
+//                     placeholder="Quantity"
+//                     className="border p-2"
+//                     value={newItem.quantity}
+//                     onChange={(e) => setNewItem({ ...newItem, quantity: Number(e.target.value) })}
+//                 />
+//                 <button onClick={addItem} className="bg-blue-600 text-white px-4 py-2 rounded">
+//                     Add
+//                 </button>
+//             </div>
 
-// src/pages/admin/Stock.js
-/* import { useState, useEffect, useRef } from "react";
-import { db } from "../../firebase";
-import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import AdminLayout from "./AdminLayout";
+//             {/* Stock Table */}
+//             <table className="w-full border">
+//                 <thead>
+//                     <tr className="bg-gray-200">
+//                         <th className="p-2 border">Item</th>
+//                         <th className="p-2 border">Quantity</th>
+//                         <th className="p-2 border">Update</th>
+//                         <th className="p-2 border">Delete</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     {items.map((item) => (
+//                         <tr key={item.id} className="text-center">
+//                             <td className={`p-2 border font-bold ${item.quantity < threshold ? "text-red-600" : ""}`}>
+//                                 {item.name}
+//                             </td>
+//                             <td className={`p-2 border font-bold ${item.quantity < threshold ? "text-red-600" : ""}`}>
+//                                 {item.quantity}
+//                             </td>
+//                             <td className="p-2 border">
+//                                 <button
+//                                     onClick={() => {
+//                                         updateQuantity(item.id, item.quantity + 1);
+//                                         setItems(items.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i));
+//                                     }}
+//                                     className="px-2 bg-green-500 text-white rounded"
+//                                 >
+//                                     +1
+//                                 </button>
+//                                 <button
+//                                     onClick={() => {
+//                                         updateQuantity(item.id, item.quantity - 1);
+//                                         setItems(items.map(i => i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i));
+//                                     }}
+//                                     className="px-2 ml-2 bg-red-500 text-white rounded"
+//                                 >
+//                                     -1
+//                                 </button>
+//                             </td>
+//                             <td className="p-2 border">
+//                                 <button
+//                                     onClick={() => deleteItem(item.id, item.name)}
+//                                     className="px-2 bg-red-600 text-white rounded"
+//                                 >
+//                                     Delete
+//                                 </button>
+//                             </td>
+//                         </tr>
+//                     ))}
+//                 </tbody>
+//             </table>
+//         </AdminLayout>
+//     );
+// }
 
-function Stock() {
-    const [items, setItems] = useState([]);
-    const [newItem, setNewItem] = useState({ name: "", quantity: 0 });
-    const threshold = 5;
-
-    const updateTimers = useRef({});
-
-    useEffect(() => {
-        fetchStock();
-    }, []);
-
-    const fetchStock = async () => {
-        const snapshot = await getDocs(collection(db, "stock"));
-        setItems(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    };
-
-    const addItem = async () => {
-        await addDoc(collection(db, "stock"), newItem);
-        setNewItem({ name: "", quantity: 0 });
-        fetchStock();
-    };
-
-    const updateQuantity = (id, quantity) => {
-        if (updateTimers.current[id]) {
-            clearTimeout(updateTimers.current[id]);
-        }
-
-        updateTimers.current[id] = setTimeout(async () => {
-            await updateDoc(doc(db, "stock", id), { quantity });
-            fetchStock();
-            delete updateTimers.current[id];
-        }, 300);
-    };
-
-    const deleteItem = async (id, name) => {
-        const confirmDelete = window.confirm(`Are you sure you want to delete "${name}"?`);
-        if (!confirmDelete) return;
-
-        await deleteDoc(doc(db, "stock", id));
-        setItems(items.filter((item) => item.id !== id)); // update UI without refetch
-    };
-
-    return (
-        <AdminLayout>
-            <h2 className="text-2xl font-bold mb-4">Stock Tracking</h2>
-            <div className="mb-4 flex gap-2">
-                <input
-                    type="text"
-                    placeholder="Item name"
-                    className="border p-2"
-                    value={newItem.name}
-                    onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-                />
-                <input
-                    type="number"
-                    placeholder="Quantity"
-                    className="border p-2"
-                    value={newItem.quantity}
-                    onChange={(e) => setNewItem({ ...newItem, quantity: Number(e.target.value) })}
-                />
-                <button onClick={addItem} className="bg-blue-600 text-white px-4 py-2 rounded">
-                    Add
-                </button>
-            </div>
-
-            <table className="w-full border">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th className="p-2 border">Item</th>
-                        <th className="p-2 border">Quantity</th>
-                        <th className="p-2 border">Update</th>
-                        <th className="p-2 border">Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {items.map((item) => (
-                        <tr key={item.id} className="text-center">
-                            <td className={`p-2 border font-bold ${item.quantity < threshold ? "text-red-600" : ""}`}>
-                                {item.name}
-                            </td>
-                            <td className={`p-2 border font-bold ${item.quantity < threshold ? "text-red-600" : ""}`}>
-                                {item.quantity}
-                            </td>
-                            <td className="p-2 border">
-                                <button
-                                    onClick={() => {
-                                        updateQuantity(item.id, item.quantity + 1);
-                                        setItems(items.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i));
-                                    }}
-                                    className="px-2 bg-green-500 text-white rounded"
-                                >
-                                    +1
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        updateQuantity(item.id, item.quantity - 1);
-                                        setItems(items.map(i => i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i));
-                                    }}
-                                    className="px-2 ml-2 bg-red-500 text-white rounded"
-                                >
-                                    -1
-                                </button>
-                            </td>
-                            <td className="p-2 border">
-                                <button
-                                    onClick={() => deleteItem(item.id, item.name)}
-                                    className="px-2 bg-red-600 text-white rounded"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </AdminLayout>
-    );
-}
-
-export default Stock; */
+// export default Stock;
 
 
 // src/pages/admin/Stock.js
@@ -242,147 +151,161 @@ import { useState, useEffect, useRef } from "react";
 import { db } from "../../firebase";
 import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import AdminLayout from "./AdminLayout";
+import { Plus, Minus, Trash2 } from "lucide-react";
 
 function Stock() {
-    const [items, setItems] = useState([]);
-    const [newItem, setNewItem] = useState({ name: "", quantity: 0 });
-    const threshold = 5;
+  const [items, setItems] = useState([]);
+  const [newItem, setNewItem] = useState({ name: "", quantity: 0 });
+  const threshold = 5;
 
-    const updateTimers = useRef({});
+  const updateTimers = useRef({});
 
-    useEffect(() => {
-        fetchStock();
-    }, []);
+  useEffect(() => {
+    fetchStock();
+  }, []);
 
-    const fetchStock = async () => {
-        const snapshot = await getDocs(collection(db, "stock"));
-        setItems(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    };
+  const fetchStock = async () => {
+    const snapshot = await getDocs(collection(db, "stock"));
+    setItems(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+  };
 
-    const addItem = async () => {
-        if (!newItem.name.trim()) return;
-        await addDoc(collection(db, "stock"), newItem);
-        setNewItem({ name: "", quantity: 0 });
-        fetchStock();
-    };
+  const addItem = async () => {
+    if (!newItem.name.trim()) return;
+    await addDoc(collection(db, "stock"), newItem);
+    setNewItem({ name: "", quantity: 0 });
+    fetchStock();
+  };
 
-    const updateQuantity = (id, quantity) => {
-        if (updateTimers.current[id]) {
-            clearTimeout(updateTimers.current[id]);
-        }
+  const updateQuantity = (id, quantity) => {
+    if (updateTimers.current[id]) {
+      clearTimeout(updateTimers.current[id]);
+    }
 
-        updateTimers.current[id] = setTimeout(async () => {
-            await updateDoc(doc(db, "stock", id), { quantity });
-            fetchStock();
-            delete updateTimers.current[id];
-        }, 300);
-    };
+    updateTimers.current[id] = setTimeout(async () => {
+      await updateDoc(doc(db, "stock", id), { quantity });
+      fetchStock();
+      delete updateTimers.current[id];
+    }, 300);
+  };
 
-    const deleteItem = async (id, name) => {
-        const confirmDelete = window.confirm(`Are you sure you want to delete "${name}"?`);
-        if (!confirmDelete) return;
+  const deleteItem = async (id, name) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete "${name}"?`);
+    if (!confirmDelete) return;
 
-        await deleteDoc(doc(db, "stock", id));
-        setItems(items.filter((item) => item.id !== id));
-    };
+    await deleteDoc(doc(db, "stock", id));
+    setItems(items.filter((item) => item.id !== id));
+  };
 
-    // Find low stock items
-    const lowStockItems = items.filter(item => item.quantity < threshold);
+  const lowStockItems = items.filter((item) => item.quantity < threshold);
 
-    return (
-        <AdminLayout>
-            <h2 className="text-2xl font-bold mb-4">Stock Tracking</h2>
+  return (
+    <AdminLayout>
+      <h2 className="text-3xl font-semibold mb-6">📦 Stock Tracking</h2>
 
-            {/* Low Stock Alert Section */}
-            {lowStockItems.length > 0 && (
-                <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                    <strong>⚠ Low Stock Alert!</strong>
-                    <ul className="list-disc list-inside mt-2">
-                        {lowStockItems.map(item => (
-                            <li key={item.id}>
-                                {item.name} (Only {item.quantity} left)
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+      {/* Low Stock Alert */}
+      {lowStockItems.length > 0 && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-300 text-red-700 rounded-lg shadow-sm">
+          <strong>⚠ Low Stock Alert!</strong>
+          <ul className="list-disc list-inside mt-2">
+            {lowStockItems.map((item) => (
+              <li key={item.id}>
+                {item.name} (Only {item.quantity} left)
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-            {/* Add Item Section */}
-            <div className="mb-4 flex gap-2">
-                <input
-                    type="text"
-                    placeholder="Item name"
-                    className="border p-2"
-                    value={newItem.name}
-                    onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-                />
-                <input
-                    type="number"
-                    placeholder="Quantity"
-                    className="border p-2"
-                    value={newItem.quantity}
-                    onChange={(e) => setNewItem({ ...newItem, quantity: Number(e.target.value) })}
-                />
-                <button onClick={addItem} className="bg-blue-600 text-white px-4 py-2 rounded">
-                    Add
-                </button>
-            </div>
+      {/* Add Item Form */}
+      <div className="mb-6 flex gap-3">
+        <input
+          type="text"
+          placeholder="Item name"
+          className="border rounded-md p-2 flex-1 focus:ring-2 focus:ring-blue-400 outline-none"
+          value={newItem.name}
+          onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+        />
+        <input
+          type="number"
+          placeholder="Quantity"
+          className="border rounded-md p-2 w-32 focus:ring-2 focus:ring-blue-400 outline-none"
+          value={newItem.quantity}
+          onChange={(e) => setNewItem({ ...newItem, quantity: Number(e.target.value) })}
+        />
+        <button
+          onClick={addItem}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow"
+        >
+          Add
+        </button>
+      </div>
 
-            {/* Stock Table */}
-            <table className="w-full border">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th className="p-2 border">Item</th>
-                        <th className="p-2 border">Quantity</th>
-                        <th className="p-2 border">Update</th>
-                        <th className="p-2 border">Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {items.map((item) => (
-                        <tr key={item.id} className="text-center">
-                            <td className={`p-2 border font-bold ${item.quantity < threshold ? "text-red-600" : ""}`}>
-                                {item.name}
-                            </td>
-                            <td className={`p-2 border font-bold ${item.quantity < threshold ? "text-red-600" : ""}`}>
-                                {item.quantity}
-                            </td>
-                            <td className="p-2 border">
-                                <button
-                                    onClick={() => {
-                                        updateQuantity(item.id, item.quantity + 1);
-                                        setItems(items.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i));
-                                    }}
-                                    className="px-2 bg-green-500 text-white rounded"
-                                >
-                                    +1
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        updateQuantity(item.id, item.quantity - 1);
-                                        setItems(items.map(i => i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i));
-                                    }}
-                                    className="px-2 ml-2 bg-red-500 text-white rounded"
-                                >
-                                    -1
-                                </button>
-                            </td>
-                            <td className="p-2 border">
-                                <button
-                                    onClick={() => deleteItem(item.id, item.name)}
-                                    className="px-2 bg-red-600 text-white rounded"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </AdminLayout>
-    );
+      {/* Stock Table */}
+      <div className="overflow-hidden rounded-xl shadow-md border border-gray-200">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
+            <tr>
+              <th className="px-6 py-3 text-left">Item</th>
+              <th className="px-6 py-3 text-left">Quantity</th>
+              <th className="px-6 py-3 text-center">Update</th>
+              <th className="px-6 py-3 text-center">Delete</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-white">
+            {items.map((item) => (
+              <tr
+                key={item.id}
+                className={`hover:bg-gray-50 ${
+                  item.quantity < threshold ? "text-red-600 font-medium" : ""
+                }`}
+              >
+                <td className="px-6 py-4">{item.name}</td>
+                <td className="px-6 py-4">{item.quantity}</td>
+                <td className="px-6 py-4 text-center">
+                  <div className="flex justify-center gap-2">
+                    <button
+                      onClick={() => {
+                        updateQuantity(item.id, item.quantity + 1);
+                        setItems(
+                          items.map((i) =>
+                            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+                          )
+                        );
+                      }}
+                      className="p-2 rounded-full bg-green-100 text-green-700 hover:bg-green-200"
+                    >
+                      <Plus size={16} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        updateQuantity(item.id, item.quantity - 1);
+                        setItems(
+                          items.map((i) =>
+                            i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i
+                          )
+                        );
+                      }}
+                      className="p-2 rounded-full bg-red-100 text-red-700 hover:bg-red-200"
+                    >
+                      <Minus size={16} />
+                    </button>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-center">
+                  <button
+                    onClick={() => deleteItem(item.id, item.name)}
+                    className="p-2 rounded-full bg-red-100 text-red-700 hover:bg-red-200"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </AdminLayout>
+  );
 }
 
 export default Stock;
-
-
